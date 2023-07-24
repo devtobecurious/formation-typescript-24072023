@@ -30,9 +30,14 @@ class Hobbit {
 let frodon = new Hobbit('Frodon', 33);
 frodon.nom = 'coucou';
 frodon.nom = 1;
-frodon.seDeplacer(() => {
-    console.log('coucou');
+frodon.seDeplacer(function(message) {
+ console.info(message);   
 });
+
+frodon.seDeplacer((message) => {
+    console.info(message);
+});
+
 frodon.seDeplacer('truc');
 
 frodon = 1;
