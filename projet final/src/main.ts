@@ -1,7 +1,7 @@
-import { Personnage } from "./personnage";
-import { Elfe } from "./elfe";
-import { Hobbit } from "./hobbit";
-import { Arme } from "./arme";
+import { Personnage } from "./domain/personnage";
+import { Elfe } from "./domain/elfe";
+import { Hobbit } from "./domain/hobbit";
+import { Arme } from "./domain/arme";
 
 const resultPseudo = prompt('Prenom ?');
 
