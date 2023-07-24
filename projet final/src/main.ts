@@ -1,11 +1,14 @@
 import { Personnage } from "./personnage";
 import { Elfe } from "./elfe";
 import { Hobbit } from "./hobbit";
+import { Arme } from "./arme";
 
 const resultPseudo = prompt('Prenom ?');
 
 if (resultPseudo) { // type guard
-    const personnage: Personnage = new Hobbit(resultPseudo, 100);
+    const arme = new Arme('Epée', 10);
+
+    const personnage: Personnage = new Hobbit(resultPseudo, 100, arme);
 }
 
 
