@@ -1,10 +1,14 @@
  import { Arme } from "./arme";
 import { AfficherString, AfficherStringOrNonReference } from "../core/custom-types/callbacks";
 
+export interface Attaquer {
+    attaquer(personnage: Personnage, afficher: AfficherString): void;
+}
+
 /**
  * Classe abstraite représentant un personnage
  */
-export abstract class Personnage {
+export abstract class Personnage implements Attaquer {
     public pointsDeVie: number;
     private afficher: AfficherStringOrNonReference;
 
