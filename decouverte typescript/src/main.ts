@@ -147,3 +147,64 @@ document.addEventListener('DOMContentLoaded', function() {
     var elems = document.querySelectorAll('.dropdown-trigger');
     var instances = M.Dropdown.init(elems, {});
 });
+
+
+// -----------------------------
+
+
+
+interface ListComplete<Type, Index> {
+    add(element: Type, index: Index): void;
+    get(index: Index): Type;
+    size(): number;
+}
+
+const typeTest: ListComplete<string, number> = {
+    add: (element: string, index: number): void => {},
+    get: (index: number): string => '',
+    size: (): number => 0
+}
+
+interface Item {
+    id: number;
+    nom: string;
+}
+
+interface List<Type extends Item | number> {
+    add(element: Type): void;
+    get(index: number): Type;
+    size(): number;
+}
+
+class ArrayList<T extends Item> implements List<T> {
+    private elements: T[] = [];
+
+    add(element: T): void {
+        const index = element.id;
+        this.elements.push(element);
+    }
+
+    get(index: number): T {
+        return this.elements[index];
+    }
+
+    size(): number {
+        return this.elements.length;
+    }
+}
+
+const listeS = new ArrayList<{ id: number, nom: string }>();
+listeS.add({ id: 1, nom: 'Frodo' });
+const listeN = new ArrayList<Item>();
+listeN.add({ id: 1, nom: 'Sam'});
+
+
+function display<T extends Item>(liste: List<T>): void {
+    for (let i = 0; i < liste.size(); i++) {
+        const element = liste.get(i);
+        console.log(element.nom);
+    }
+}
+display(listeS);
+display(listeN);
+display(new ArrayList<Item>());
