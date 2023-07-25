@@ -176,11 +176,13 @@ interface List<Type extends Item | number> {
     size(): number;
 }
 
-class ArrayList<T extends Item> implements List<T> {
+class ArrayList<T extends Item | number> implements List<T> {
     private elements: T[] = [];
 
     add(element: T): void {
-        const index = element.id;
+        if (typeof(element) !== 'number') {
+            const index = element.id;
+        }
         this.elements.push(element);
     }
 
@@ -193,18 +195,118 @@ class ArrayList<T extends Item> implements List<T> {
     }
 }
 
-const listeS = new ArrayList<{ id: number, nom: string }>();
-listeS.add({ id: 1, nom: 'Frodo' });
+const listeS = new ArrayList<Item | number>();
+listeS.add(1);
+listeS.add({ id: 1, nom: 'Sam'});
+
 const listeN = new ArrayList<Item>();
 listeN.add({ id: 1, nom: 'Sam'});
 
 
-function display<T extends Item>(liste: List<T>): void {
+function display<T extends Item | number>(liste: List<T>): void {
     for (let i = 0; i < liste.size(); i++) {
         const element = liste.get(i);
-        console.log(element.nom);
+
+        console.info(element);
+        if (typeof(element) !== 'number') {
+            console.log(element.nom);
+        }
     }
 }
 display(listeS);
 display(listeN);
 display(new ArrayList<Item>());
+
+// -----------------------------
+
+type Elfe = { 
+    tirerALarc(): void;
+    grimper(): void;
+};
+type Nain = {
+    utiliserHache(): void;
+    manger(): void;
+}
+
+function fight(personnage: Elfe | Nain) {
+    if (isElfe(personnage)) {
+        personnage.tirerALarc();
+        personnage.grimper();
+    } else {
+        personnage.utiliserHache();
+        personnage.manger();
+    }
+}
+
+/** Functional type guard */
+function isNain(personnage: Elfe | Nain): personnage is Nain {
+    return 'utiliserHache' in personnage;
+}
+
+function isElfe(item: Elfe | Nain): item is Elfe {
+    return (item as Elfe).tirerALarc !== undefined;
+}
+
+const nain = isNain({ tirerALarc: () => {}, grimper: () => {} });
+
+/** Aller plus loin */
+
+type Oliphant = {
+    id: number;
+    taille: number;
+    longueurTrompe: number;
+}
+
+type monEnum = 'id' | 'taille' | 'longueurTrompe';
+
+
+type Test =  keyof Oliphant; // 'id' | 'taille' | 'longueurTrompe'
+const test: Test = 'longueurTrompe';
+
+function getValue(objet: Oliphant, key: keyof Oliphant): number {
+    return objet[key];
+}
+
+getValue({ id: 1, taille: 10, longueurTrompe: 5 }, 'longueurTrompe');
+
+
+
+type TypeAPartirAutreType<T> = {
+    [key in keyof T]: key
+}
+
+const t: TypeAPartirAutreType<Oliphant> = { id: 'id', taille: 'taille', longueurTrompe: 'longueurTrompe'}
+
+
+
+
+
+type GetKeysAsLiteral<T> = keyof T;
+
+type Sort = 'asc' | 'desc';
+function sortObjectArray<Type, Key extends GetKeysAsLiteral<Type>>(array: Type[], key: Key, sort: Sort) {
+    return array.sort((a, b) => {
+        if (sort === 'asc') {
+            return a[key] > b[key] ? 1 : -1;
+        } else {
+            return a[key] < b[key] ? 1 : -1;
+        }
+    });
+}
+const oliphants: Oliphant[] = [ { id: 1, taille: 10, longueurTrompe: 3 } ];
+sortObjectArray(oliphants, 'taille', 'asc');
+
+// -----------------------------
+
+type OliphantSans = Omit<Oliphant, 'id'>;
+type OliphantPick = Pick<Oliphant, 'id' | 'taille'>;
+
+type OliphantPartial = Partial<Oliphant>;
+type OliphantRequired = Required<OliphantPartial>;
+
+
+function saisirTaille(): OliphantPartial {
+    return {
+        taille: 10
+    };
+}
