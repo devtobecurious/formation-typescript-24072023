@@ -89,6 +89,12 @@ class Urukhai {
     constructor() {
         this.nom = 'Urukhai';
     }
+    
+    // combattre(): void {
+    //     if (this.force) {
+    //         console.log('Je combat avec ' + this.force);
+    //     }
+    // }
 
     // combattre(): void {
     //     if (typeof this.armes === 'string') {
@@ -110,6 +116,7 @@ type UrukhaiT = {
     pointsDeVie: number;
     force: number | undefined | null;
     poids: number;
+    taille ?: number;
     //armes: string | string[];
 }
 
@@ -119,6 +126,10 @@ const caRessembleAUnUrukhai: UrukhaiT = {
     force: 10,
     poids: 100
 };
+
+function formattedTaille(objet: UrukhaiT): string | undefined {
+     return objet.taille?.toFixed(2);
+}
 
 const mechants: Urukhai[] = [
     urukhai,
