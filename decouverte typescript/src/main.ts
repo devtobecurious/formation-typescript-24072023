@@ -310,3 +310,39 @@ function saisirTaille(): OliphantPartial {
         taille: 10
     };
 }
+
+function logger() {
+    return function actualDecorator(sourceMethod: any, context: ClassMemberDecoratorContext) {
+        const nomMethode = context.name;
+
+        function remplacementMethod(this: any, ...args: any[]) {
+            let result: string | undefined = undefined;
+
+            try {
+                let result = sourceMethod.call(this, args); // Méthode de ma classe
+            } catch (e) {
+                console.log('Erreur dans la méthode ' + String(nomMethode));
+            }
+
+            return result;
+        }
+
+        return remplacementMethod;
+    }
+}
+
+/***
+ * 
+ * DECORATORS
+ */
+class Nazgul {
+    @logger()
+    voler(): void {
+        //console.log('Je log l\'appel');
+    }
+
+    @logger()
+    mordre(): void {
+        //console.log('Je log l\'appel');
+    }
+}
