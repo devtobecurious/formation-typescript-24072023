@@ -61,9 +61,71 @@ class Perroquet implements Voler {
 function FaireVoler(objet: { voler(): void }) {
     objet.voler();
 }
-FaireVoler(new Leia());
-FaireVoler(new Perroquet());
 
-FaireVoler({
+type VolerT = { 
+    voler(): void 
+};
+
+function FaireVolerBis(objet: VolerT) {
+    objet.voler();
+}
+FaireVoler(new Leia());
+FaireVolerBis(new Perroquet());
+
+const monObjQuiVole = {
     voler: () => console.log('Je vole')
-});
+}
+FaireVolerBis(monObjQuiVole);
+
+/* ----------------------------------- */
+// Travailler la notion de type => bis, avec class ?
+class Urukhai {
+    nom: string;
+    pointsDeVie = 100;
+    force: number | undefined | null;
+    poids !: number;
+    //armes: string | string[] = [];
+
+    constructor() {
+        this.nom = 'Urukhai';
+    }
+
+    // combattre(): void {
+    //     if (typeof this.armes === 'string') {
+    //         console.log('Je combat avec ' + this.armes);
+    //     }
+    // }
+}
+
+const urukhai = new Urukhai();
+const urukhai2: Urukhai = {
+    nom: 'Urukhai',
+    pointsDeVie: 100,
+    force: 10,
+    poids: 100
+};
+
+type UrukhaiT = {
+    nom: string;
+    pointsDeVie: number;
+    force: number | undefined | null;
+    poids: number;
+    //armes: string | string[];
+}
+
+const caRessembleAUnUrukhai: UrukhaiT = {
+    nom: 'Urukhai',
+    pointsDeVie: 100,
+    force: 10,
+    poids: 100
+};
+
+const mechants: Urukhai[] = [
+    urukhai,
+    urukhai2, 
+    caRessembleAUnUrukhai
+];
+
+function afficherMechants(mechants: Urukhai[]): void {
+    mechants.forEach(mechant => console.log(mechant.pointsDeVie));
+}
